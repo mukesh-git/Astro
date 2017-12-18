@@ -1,0 +1,42 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mukeshteckwani.astro.astroapp.view.MainActivity">
+
+    <item
+        android:id="@+id/tv_guide"
+        android:title="@string/tvguide"
+        app:showAsAction="withText|ifRoom" />
+
+    <item
+        android:id="@+id/logout"
+        android:title="@string/action_logout"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sort_order"
+        android:title="@string/sort_order"
+        app:showAsAction="never">
+
+        <menu>
+
+            <item
+                android:id="@+id/name_ascending"
+                android:title="@string/name_asc" />
+            <item
+                android:id="@+id/name_descending"
+                android:title="@string/name_desc" />
+            <item
+                android:id="@+id/channel_no_ascending"
+                android:title="@string/no_asc" />
+
+            <item
+                android:id="@+id/channel_no_descending"
+                android:title="@string/no_desc" />
+
+        </menu>
+
+
+    </item>
+
+</menu>

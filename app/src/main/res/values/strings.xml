@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AstroApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="error">Something went wrong.Please try again later.</string>
+    <string name="action_logout">Logout</string>
+    <string name="tvguide">Tv Guide</string>
+    <string name="sort_order">Sort Order:</string>
+    <string name="name_asc">Name Ascending</string>
+    <string name="name_desc">Name Descending</string>
+    <string name="no_asc">Channel No Ascending</string>
+    <string name="no_desc">Channel No Descending</string>
+</resources>

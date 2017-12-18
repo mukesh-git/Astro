@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "543279636747",
+    "firebase_url": "https://fir-astrosample.firebaseio.com",
+    "project_id": "firebase-astrosample",
+    "storage_bucket": "firebase-astrosample.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543279636747:android:398325e20d462784",
+        "android_client_info": {
+          "package_name": "com.mukeshteckwani.astro.astroapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543279636747-b83c7k79si7l9mtu1mp8vte256cseshv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "543279636747-8jorp3tj0t9bkf3cdkvu0dchr3rc4c8v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mukeshteckwani.astro.astroapp",
+            "certificate_hash": "9941aa6577b4a096244c2955d84f0c0912d545d1"
+          }
+        },
+        {
+          "client_id": "543279636747-v4dob9vurfuu1a46ribhmm6a1r5nvck3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA57xqFMPAggOUugx2wpcC5qybcWak_2Gg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543279636747-b83c7k79si7l9mtu1mp8vte256cseshv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
