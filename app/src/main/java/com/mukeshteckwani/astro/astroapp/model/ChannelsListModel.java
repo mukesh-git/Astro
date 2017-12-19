@@ -37,7 +37,10 @@ public class ChannelsListModel {
         return channels;
     }
 
-    public class Channel extends BaseObservable{
+    public static class Channel extends BaseObservable{
+        public Channel() {
+            // Default constructor required for calls to DataSnapshot.getValue(Channel.class)
+        }
 
         @SerializedName("channelId")
         @Expose

@@ -26,6 +26,7 @@ import retrofit2.Call;
 
 public class ChannelsListViewModel extends AndroidViewModel {
     private DatabaseReference mFavDatabase;
+    private DatabaseReference mSortDatabase;
 
     public ChannelsListViewModel(@NonNull Application application) {
         super(application);
@@ -34,6 +35,7 @@ public class ChannelsListViewModel extends AndroidViewModel {
     public LiveData<ChannelsListModel> getChannelList() {
         String url = "http://ams-api.astro.com.my/ams/v3/getChannelList";
         MutableLiveData<ChannelsListModel> liveData = new MutableLiveData<>();
+        mFavDatabase = FirebaseDatabase.getInstance().getReference().child("favourites");
         RetorfitCallback<ChannelsListModel> callback = new RetorfitCallback<>(getApplication(), new RetorfitCallback.Listener<ChannelsListModel>() {
             @Override
             public void onResponse(Call<ChannelsListModel> call, ChannelsListModel response) {
@@ -58,8 +60,6 @@ public class ChannelsListViewModel extends AndroidViewModel {
 
     public LiveData<List<ChannelsListModel.Channel>> getFavouriteChannels() {
         MutableLiveData<List<ChannelsListModel.Channel>> liveData = new MutableLiveData<>();
-
-        mFavDatabase = FirebaseDatabase.getInstance().getReference().child("favourites");
         mFavDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,14 +77,34 @@ public class ChannelsListViewModel extends AndroidViewModel {
         });
 
         return liveData;
-
     }
 
-    public void writeOrRemoveData(ChannelsListModel.Channel channel) {
+    public void writeOrRemoveChannelsData(ChannelsListModel.Channel channel) {
         if (channel.isChecked())
             mFavDatabase.child(String.valueOf(channel.getChannelId())).setValue(channel);
         else
             mFavDatabase.child(String.valueOf(channel.getChannelId())).removeValue();
+    }
+
+    public LiveData<Integer> getSortOrder(){
+        MutableLiveData<Integer> liveData = new MutableLiveData<>();
+        mSortDatabase = FirebaseDatabase.getInstance().getReference().child("sort_order");
+        mSortDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                liveData.setValue(dataSnapshot.getValue(Integer.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                liveData.setValue(0);
+            }
+        });
+        return liveData;
+    }
+
+    public void setSortOrder(int sortOrder){
+        mSortDatabase.setValue(sortOrder);
     }
 
 }

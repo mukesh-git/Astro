@@ -15,11 +15,11 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.mukeshteckwani.astro.astroapp.R;
 import com.mukeshteckwani.astro.astroapp.adapter.ChannelsAdapter;
 import com.mukeshteckwani.astro.astroapp.databinding.ActivityMainBinding;
 import com.mukeshteckwani.astro.astroapp.model.ChannelsListModel;
+import com.mukeshteckwani.astro.astroapp.utils.Constants;
 import com.mukeshteckwani.astro.astroapp.viewmodel.ChannelsListViewModel;
 
 import java.util.Collections;
@@ -34,37 +34,41 @@ public class MainActivity extends AppCompatActivity {
     private ChannelsAdapter allChannelsAdapter;
     private ChannelsListModel.Channel mChannel;
     private Menu menu;
+    private ChannelsAdapter mFavChannelsAdapter;
+    private List<ChannelsListModel.Channel> mFavChannels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setSupportActionBar(binding.toolbar);
         viewModel = ViewModelProviders.of(this).get(ChannelsListViewModel.class);
         fetchChannels();
-        initFavouitesList();
+        fetchFavouites();
     }
 
-    private void initFavouitesList() {
+    private void fetchFavouites() {
         viewModel.getFavouriteChannels().observe(this, channelsList -> {
-            if (channelsList != null) {//check for fav ,set using view model callback
+            if (channelsList != null && channelsList.size() > 0) {//check for fav ,set using view model callback
+                mFavChannels =channelsList;
                 binding.layoutMain.rvFavourites.setNestedScrollingEnabled(false);
                 binding.layoutMain.tvFavLabel.setVisibility(View.VISIBLE);
                 binding.layoutMain.rvFavourites.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-                ChannelsAdapter favChannelsAdapter = new ChannelsAdapter(channelsList, channel -> {
+                mFavChannelsAdapter = new ChannelsAdapter(channelsList, channel -> {
                     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                         channel.setChecked(!channel.isChecked());
-                        viewModel.writeOrRemoveData(channel);
-                    } else {
-                        initFirebaseAuth();
-                        mChannel = channel;
+                        viewModel.writeOrRemoveChannelsData(channel);
                     }
                 });
-                binding.layoutMain.rvFavourites.setAdapter(favChannelsAdapter);
+                binding.layoutMain.rvFavourites.setAdapter(mFavChannelsAdapter);
             }
-        });
+            viewModel.getSortOrder().observe(this, sortOrder -> {
+                sort(sortOrder, allChannelsAdapter, mChannels);
+                sort(sortOrder, mFavChannelsAdapter,mFavChannels);
 
+            });
+        });
     }
 
     private void fetchChannels() {
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         allChannelsAdapter = new ChannelsAdapter(channels, channel -> {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 channel.setChecked(!channel.isChecked());
-                viewModel.writeOrRemoveData(channel);
+                viewModel.writeOrRemoveChannelsData(channel);
             } else {
                 initFirebaseAuth();
                 mChannel = channel;
@@ -115,41 +119,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        MenuItem sortItem = menu.findItem(R.id.sort_order);
+
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.name_ascending:
-                binding.pb.setVisibility(View.VISIBLE);
-                sortItem.setTitle("Sort Order: Name Ascending");
-                Collections.sort(mChannels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
-                allChannelsAdapter.notifyDataSetChanged();
-                binding.pb.setVisibility(View.GONE);
+                viewModel.setSortOrder(Constants.SORT_NAME_ASC);
+                sort(Constants.SORT_NAME_ASC,allChannelsAdapter,mChannels);
                 return true;
 
             case R.id.name_descending:
-                binding.pb.setVisibility(View.VISIBLE);
-                sortItem.setTitle("Sort Order: Name Descending");
-                Collections.sort(mChannels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
-                Collections.reverse(mChannels);
-                allChannelsAdapter.notifyDataSetChanged();
-                binding.pb.setVisibility(View.GONE);
+                viewModel.setSortOrder(Constants.SORT_NAME_DESC);
+                sort(Constants.SORT_NAME_DESC,allChannelsAdapter,mChannels);
                 return true;
 
             case R.id.channel_no_ascending:
-                binding.pb.setVisibility(View.VISIBLE);
-                sortItem.setTitle("Sort Order: Channel No. Ascending");
-                Collections.sort(mChannels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
-                allChannelsAdapter.notifyDataSetChanged();
-                binding.pb.setVisibility(View.GONE);
+                viewModel.setSortOrder(Constants.SORT_ID_ASC);
+                sort(Constants.SORT_ID_ASC,allChannelsAdapter,mChannels);
                 return true;
 
             case R.id.channel_no_descending:
-                binding.pb.setVisibility(View.VISIBLE);
-                sortItem.setTitle("Sort Order: Channel No. Descending");
-                Collections.sort(mChannels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
-                Collections.reverse(mChannels);
-                allChannelsAdapter.notifyDataSetChanged();
-                binding.pb.setVisibility(View.GONE);
+                viewModel.setSortOrder(Constants.SORT_ID_DESC);
+                sort(Constants.SORT_ID_DESC,allChannelsAdapter,mChannels);
                 return true;
 
             case R.id.logout:
@@ -170,6 +160,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void sort(int sortOrder,ChannelsAdapter channelsAdapter,List<ChannelsListModel.Channel> channels) {
+        if (channels == null || channels.size() == 0)
+            return;
+        MenuItem sortItem = menu.findItem(R.id.sort_order);
+            switch (sortOrder) {
+                case Constants.SORT_NAME_ASC :
+                    sortItem.setTitle("Sort Order: Name Ascending");
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
+                    channelsAdapter.notifyDataSetChanged();
+                    break;
+
+                case Constants.SORT_NAME_DESC :
+                    sortItem.setTitle("Sort Order: Name Descending");
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
+                    Collections.reverse(channels);
+                    channelsAdapter.notifyDataSetChanged();
+                    break;
+
+                case Constants.SORT_ID_ASC :
+                    sortItem.setTitle("Sort Order: Channel No. Ascending");
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
+                    channelsAdapter.notifyDataSetChanged();
+                    break;
+
+                case Constants.SORT_ID_DESC :
+                    sortItem.setTitle("Sort Order: Channel No. Descending");
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
+                    Collections.reverse(channels);
+                    channelsAdapter.notifyDataSetChanged();
+                    break;
+
+            }
+        }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -180,8 +204,9 @@ public class MainActivity extends AppCompatActivity {
                 // Successfully signed in
 //                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 // save to db the channel id
-                viewModel.writeOrRemoveData(mChannel);
+                viewModel.writeOrRemoveChannelsData(mChannel);
                 mChannel.setChecked(!mChannel.isChecked());
+                fetchFavouites();
 //                allChannelsAdapter.notifyItemChanged(mChannels.indexOf(mChannel));
 
             } else {
