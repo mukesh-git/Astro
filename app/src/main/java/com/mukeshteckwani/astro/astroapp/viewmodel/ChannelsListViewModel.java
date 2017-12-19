@@ -86,13 +86,16 @@ public class ChannelsListViewModel extends AndroidViewModel {
             mFavDatabase.child(String.valueOf(channel.getChannelId())).removeValue();
     }
 
-    public LiveData<Integer> getSortOrder(){
+    public LiveData<Integer> getSortOrder() {
         MutableLiveData<Integer> liveData = new MutableLiveData<>();
         mSortDatabase = FirebaseDatabase.getInstance().getReference().child("sort_order");
         mSortDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                liveData.setValue(dataSnapshot.getValue(Integer.class));
+                if (dataSnapshot.getValue(Integer.class) != null)
+                    liveData.setValue(dataSnapshot.getValue(Integer.class));
+                else
+                    liveData.setValue(0);
             }
 
             @Override
@@ -103,7 +106,7 @@ public class ChannelsListViewModel extends AndroidViewModel {
         return liveData;
     }
 
-    public void setSortOrder(int sortOrder){
+    public void setSortOrder(int sortOrder) {
         mSortDatabase.setValue(sortOrder);
     }
 
