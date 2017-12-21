@@ -6,4 +6,5 @@ package com.mukeshteckwani.astro.astroapp.utils;
 
 public class BundleKeys {
 
+    public static final String CHANNELS_LIST = "CHANNELS_LIST";
 }

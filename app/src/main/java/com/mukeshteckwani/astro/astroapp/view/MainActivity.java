@@ -18,9 +18,12 @@ import com.mukeshteckwani.astro.astroapp.R;
 import com.mukeshteckwani.astro.astroapp.adapter.ChannelsAdapter;
 import com.mukeshteckwani.astro.astroapp.databinding.ActivityMainBinding;
 import com.mukeshteckwani.astro.astroapp.model.ChannelsListModel;
+import com.mukeshteckwani.astro.astroapp.utils.BundleKeys;
 import com.mukeshteckwani.astro.astroapp.utils.Constants;
+import com.mukeshteckwani.astro.astroapp.utils.SimpleDividerItemDecoration;
 import com.mukeshteckwani.astro.astroapp.viewmodel.ChannelsListViewModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         if (channelsList != null && channelsList.size() > 0) {//check for fav ,set using view model callback
             if (mFavChannels == null) {
                 mFavChannels = channelsList;
+                binding.layoutMain.rvFavourites.addItemDecoration(new SimpleDividerItemDecoration(this));
                 binding.layoutMain.rvFavourites.setNestedScrollingEnabled(false);
                 binding.layoutMain.tvFavLabel.setVisibility(View.VISIBLE);
                 binding.layoutMain.rvFavourites.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initChannelsList(List<ChannelsListModel.Channel> channels) {
         binding.layoutMain.rvMain.setNestedScrollingEnabled(false);
+        binding.layoutMain.rvMain.addItemDecoration(new SimpleDividerItemDecoration(this));
         binding.layoutMain.rvMain.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAllChannelsAdapter = new ChannelsAdapter(channels, channel -> {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -165,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.name_ascending:
                 viewModel.setSortOrder(Constants.SORT_NAME_ASC);
@@ -188,14 +192,22 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.logout:
+                binding.pb.setVisibility(View.VISIBLE);
                 AuthUI.getInstance()
                         .signOut(this)
                         .addOnCompleteListener(task -> {
-                            //delete favourites data
+                            binding.pb.setVisibility(View.VISIBLE);
                         });
                 return true;
 
             case R.id.tv_guide:
+                ArrayList<Integer> channelIdList = new ArrayList<>();
+                for (ChannelsListModel.Channel channel : mChannels) {
+                    channelIdList.add(channel.getChannelId());
+                }
+                Intent intent = new Intent(this,TvGuideActivity.class);
+                intent.putIntegerArrayListExtra(BundleKeys.CHANNELS_LIST,channelIdList);
+                startActivity(intent);
                 return true;
 
             default:
