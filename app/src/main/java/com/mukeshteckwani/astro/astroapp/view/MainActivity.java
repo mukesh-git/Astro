@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.name_ascending:
                 viewModel.setSortOrder(Constants.SORT_NAME_ASC);
@@ -228,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         MenuItem sortItem = menu.findItem(R.id.sort_order);
         Handler handler = new Handler();
+        binding.pb.setVisibility(View.VISIBLE);
         switch (sortOrder) {
             case Constants.SORT_NAME_ASC:
                 sortItem.setTitle("Sort Order: Name Ascending");
@@ -262,8 +262,8 @@ public class MainActivity extends AppCompatActivity {
                     handler.post(channelsAdapter::notifyDataSetChanged);
                 }).start();
                 break;
-
         }
+        binding.pb.setVisibility(View.GONE);
     }
 
     @Override
@@ -271,13 +271,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == ResultCodes.OK) {
-                binding.pb.setVisibility(View.GONE);
                 if (mChannel != null) {
                     mChannel.setChecked(!mChannel.isChecked());
                     viewModel.writeOrRemoveChannelsData(mChannel);
                 }
                 fetchFavouritesAndSort();
             }
+            binding.pb.setVisibility(View.GONE);
         }
     }
 }

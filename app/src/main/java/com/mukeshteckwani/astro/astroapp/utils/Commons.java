@@ -1,7 +1,17 @@
 package com.mukeshteckwani.astro.astroapp.utils;
 
+import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.mukeshteckwani.astro.astroapp.R;
+import com.mukeshteckwani.astro.astroapp.adapter.ChannelsAdapter;
+import com.mukeshteckwani.astro.astroapp.model.ChannelsListModel;
+
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -35,6 +45,49 @@ public class Commons {
             return format2.format(newDate);
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    private static void sort(int sortOrder, ChannelsAdapter channelsAdapter, List<ChannelsListModel.Channel> channels, Menu menu) {
+        if (channels == null || channels.size() == 0)
+            return;
+        MenuItem sortItem = menu.findItem(R.id.sort_order);
+        Handler handler = new Handler();
+        switch (sortOrder) {
+            case Constants.SORT_NAME_ASC:
+                sortItem.setTitle("Sort Order: Name Ascending");
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
+                break;
+
+            case Constants.SORT_NAME_DESC:
+                sortItem.setTitle("Sort Order: Name Descending");
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
+                    Collections.reverse(channels);
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
+                break;
+
+            case Constants.SORT_ID_ASC:
+                sortItem.setTitle("Sort Order: Channel No. Ascending");
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
+                break;
+
+            case Constants.SORT_ID_DESC:
+                sortItem.setTitle("Sort Order: Channel No. Descending");
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
+                    Collections.reverse(channels);
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
+                break;
+
         }
     }
 }

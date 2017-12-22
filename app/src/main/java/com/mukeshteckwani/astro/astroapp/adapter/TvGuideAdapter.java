@@ -21,7 +21,6 @@ import java.util.List;
 public class TvGuideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<TvGuideModel.Getevent> listEvents;
-    private Context mContext;
     private boolean hideLoader;
 
     public TvGuideAdapter(List<TvGuideModel.Getevent> getevent) {
@@ -30,7 +29,7 @@ public class TvGuideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.mContext = parent.getContext();
+        Context mContext = parent.getContext();
         if (viewType == R.layout.item_tv_guide) {
             ItemTvGuideBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), viewType, parent, false);
             return new TvGuideAdapter.TvGuideViewHolder(binding);

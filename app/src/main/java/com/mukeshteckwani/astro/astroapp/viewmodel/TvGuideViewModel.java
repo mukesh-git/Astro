@@ -28,6 +28,7 @@ public class TvGuideViewModel extends AndroidViewModel {
     private int itemsCount;
     private String endTime;
     private String startTime;
+    private int sortOrder;
 
     public TvGuideViewModel(@NonNull Application application) {
         super(application);
@@ -109,4 +110,11 @@ public class TvGuideViewModel extends AndroidViewModel {
         return itemsCount;
     }
 
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
 }
