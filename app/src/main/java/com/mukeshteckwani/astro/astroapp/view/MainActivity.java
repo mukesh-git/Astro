@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -193,10 +194,15 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.logout:
                 binding.pb.setVisibility(View.VISIBLE);
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    initFirebaseAuth();
+                    return true;
+                }
+
                 AuthUI.getInstance()
                         .signOut(this)
                         .addOnCompleteListener(task -> {
-                            binding.pb.setVisibility(View.VISIBLE);
+                            binding.pb.setVisibility(View.GONE);
                         });
                 return true;
 
@@ -221,31 +227,40 @@ public class MainActivity extends AppCompatActivity {
         if (channels == null || channels.size() == 0)
             return;
         MenuItem sortItem = menu.findItem(R.id.sort_order);
+        Handler handler = new Handler();
         switch (sortOrder) {
             case Constants.SORT_NAME_ASC:
                 sortItem.setTitle("Sort Order: Name Ascending");
-                Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
-                channelsAdapter.notifyDataSetChanged();
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
                 break;
 
             case Constants.SORT_NAME_DESC:
                 sortItem.setTitle("Sort Order: Name Descending");
-                Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
-                Collections.reverse(channels);
-                channelsAdapter.notifyDataSetChanged();
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelTitle().compareTo(o2.getChannelTitle()));
+                    Collections.reverse(channels);
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
                 break;
 
             case Constants.SORT_ID_ASC:
                 sortItem.setTitle("Sort Order: Channel No. Ascending");
-                Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
-                channelsAdapter.notifyDataSetChanged();
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
                 break;
 
             case Constants.SORT_ID_DESC:
                 sortItem.setTitle("Sort Order: Channel No. Descending");
-                Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
-                Collections.reverse(channels);
-                channelsAdapter.notifyDataSetChanged();
+                new Thread(() -> {
+                    Collections.sort(channels, (o1, o2) -> o1.getChannelId() - o2.getChannelId());
+                    Collections.reverse(channels);
+                    handler.post(channelsAdapter::notifyDataSetChanged);
+                }).start();
                 break;
 
         }
@@ -255,19 +270,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-//            IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == ResultCodes.OK) {
-                // Successfully signed in
-//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                // save to db the channel id
-                mChannel.setChecked(!mChannel.isChecked());
-                viewModel.writeOrRemoveChannelsData(mChannel);
+                binding.pb.setVisibility(View.GONE);
+                if (mChannel != null) {
+                    mChannel.setChecked(!mChannel.isChecked());
+                    viewModel.writeOrRemoveChannelsData(mChannel);
+                }
                 fetchFavouritesAndSort();
-//                mAllChannelsAdapter.notifyItemChanged(mChannels.indexOf(mChannel));
-
-            } else {
-                // Sign in failed, check response for error code
-                // ...
             }
         }
     }

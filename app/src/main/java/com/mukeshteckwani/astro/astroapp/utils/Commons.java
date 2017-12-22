@@ -24,4 +24,17 @@ public class Commons {
         long newDate = date.getTime() + min * 60 * 1000;
         return dateFormat.format(newDate);
     }
+
+    public static String addSecsToTime(int sec, String time, String inputFormat, String outputFormat) {
+        SimpleDateFormat format1 = new SimpleDateFormat(inputFormat, Locale.US);
+        SimpleDateFormat format2 = new SimpleDateFormat(outputFormat, Locale.US);
+        Date date;
+        try {
+            date = format1.parse(time);
+            long newDate = date.getTime() + sec * 1000;
+            return format2.format(newDate);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

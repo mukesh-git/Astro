@@ -15,10 +15,8 @@ import com.mukeshteckwani.astro.astroapp.adapter.TvGuideAdapter;
 import com.mukeshteckwani.astro.astroapp.databinding.ActivityTvGuideBinding;
 import com.mukeshteckwani.astro.astroapp.model.TvGuideModel;
 import com.mukeshteckwani.astro.astroapp.utils.BundleKeys;
-import com.mukeshteckwani.astro.astroapp.utils.Commons;
+import com.mukeshteckwani.astro.astroapp.utils.SpacesItemDecoration;
 import com.mukeshteckwani.astro.astroapp.viewmodel.TvGuideViewModel;
-
-import java.util.ArrayList;
 
 /**
  * Created by mukeshteckwani on 21/12/17.
@@ -29,7 +27,7 @@ public class TvGuideActivity extends AppCompatActivity {
     private ActivityTvGuideBinding binding;
     private Menu menu;
     private TvGuideViewModel viewModel;
-    private boolean isLoading;
+    private boolean isLoaderShowing = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,19 +40,14 @@ public class TvGuideActivity extends AppCompatActivity {
     }
 
     private void fetchTvGuide() {
-        ArrayList<Integer> channelsIdList = getIntent().getIntegerArrayListExtra(BundleKeys.CHANNELS_LIST);
-        StringBuilder channelsIdListString = new StringBuilder("&channelId=");
-        for (Integer channelId : channelsIdList) {
-            channelsIdListString.append(String.valueOf(channelId));
-            if (channelsIdList.indexOf(channelId) < channelsIdList.size() - 1) {
-                channelsIdListString.append(",");
-            }
-        }
+        viewModel.setChannelIds(getIntent().getIntegerArrayListExtra(BundleKeys.CHANNELS_LIST));
+
         binding.pb.setVisibility(View.VISIBLE);
-        viewModel.getTvGuide(Commons.getCurrentTime(), Commons.addMinsToCurrentDate(Commons.DEFAULT_TIME_INTERVAL_IN_MINS), channelsIdListString.toString()).observe(
+        viewModel.getTvGuide(viewModel.getStartTime(),viewModel.getEndTime(), viewModel.getChannelIdsString()).observe(
                 this, tvGuideModel -> {
                     if (tvGuideModel != null) {
                         initChannelsGrid(tvGuideModel);
+                        viewModel.incrementCurrentPage();
                     }
                     binding.pb.setVisibility(View.GONE);
                 }
@@ -62,28 +55,27 @@ public class TvGuideActivity extends AppCompatActivity {
     }
 
     private void initChannelsGrid(TvGuideModel tvGuideModel) {
-        binding.layoutMain.rvTvGuide.setLayoutManager(new GridLayoutManager(this, 2));
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        binding.layoutMain.rvTvGuide.setLayoutManager(layoutManager);
         binding.layoutMain.rvTvGuide.setAdapter(new TvGuideAdapter(tvGuideModel.getGetevent()));
+        binding.layoutMain.rvTvGuide.addItemDecoration(new SpacesItemDecoration(20));
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position >= tvGuideModel.getGetevent().size() ? 2 : 1;
+            }
+        });
+
         binding.layoutMain.rvTvGuide.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-
-                layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        if (position < tvGuideModel.getGetevent().size())
-                            return 2;
-                        return 1;
-                    }
-                });
-
-                int visibleItemCount = layoutManager.getChildCount();
-                int totalItemCount = layoutManager.getItemCount();
-                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                if (isLoading) {
+                if (!isLoaderShowing) {
+                    GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                             && firstVisibleItemPosition >= 0) {
                         loadMoreItems();
@@ -100,19 +92,29 @@ public class TvGuideActivity extends AppCompatActivity {
     }
 
     private void loadMoreItems() {
+        isLoaderShowing = true;
+        viewModel.getTvGuide(viewModel.getStartTime(),viewModel.getEndTime(),viewModel.getChannelIdsString()).observe(this, tvGuideModel -> {
+            if (tvGuideModel != null) {
+                TvGuideAdapter adapter = (TvGuideAdapter) binding.layoutMain.rvTvGuide.getAdapter();
+                adapter.appendItems(tvGuideModel.getGetevent());
+                viewModel.incrementCurrentPage();
+            }
+            else {
+                TvGuideAdapter adapter = (TvGuideAdapter) binding.layoutMain.rvTvGuide.getAdapter();
+                adapter.hideLoader();
+            }
+            isLoaderShowing = false;
+
+        });
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_tv_guide, menu);
         return true;
     }
+
 
 }
