@@ -23,8 +23,6 @@ fun ChannelsListScreen(
 ) {
     val channels by viewModel.channelList.observeAsState()
     val favChannels by viewModel.favouriteChannels.observeAsState()
-    val isLoading by viewModel.isLoading.observeAsState(false)
-    
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -56,12 +54,6 @@ fun ChannelsListScreen(
                     )
                 }
             }
-        }
-        
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
         }
     }
 }

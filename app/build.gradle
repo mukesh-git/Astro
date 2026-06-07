@@ -16,6 +16,7 @@ ext {
 }
 
 android {
+    namespace "com.mukeshteckwani.astro.astroapp"
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
@@ -65,13 +66,18 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 }
 
@@ -80,7 +86,7 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.material
-    implementation bundle.network
+    implementation libs.bundles.network
     implementation libs.androidx.lifecycle.runtime
     implementation libs.androidx.lifecycle.extensions
     implementation libs.firebase.auth
@@ -94,14 +100,14 @@ dependencies {
     
     // Jetpack Compose
     implementation platform(libs.compose.bom)
-    implementation bundle.compose
+    implementation libs.bundles.compose
+    implementation "androidx.compose.material:material-icons-extended"
     debugImplementation libs.compose.ui.tooling
     
     // Hilt
     implementation libs.hilt.android
     kapt libs.hilt.compiler
     implementation libs.hilt.navigation.compose
-    implementation libs.hilt.lifecycle.viewmodel
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -4,15 +4,15 @@ android-minSdk = "21"
 android-compileSdk = "34"
 android-targetSdk = "34"
 buildTools = "34.0.0"
-appcompat = "1.6.8"
+appcompat = "1.6.1"
 constraintlayout = "2.1.4"
 material = "1.11.0"
 compose-bom = "2024.02.00"
 retrofit = "2.9.0"
 okhttp = "4.12.0"
 lifecycle = "2.6.2"
-firebase-auth = "20.13.1"
-firebase-database = "20.13.1"
+firebase-auth = "22.3.1"
+firebase-database = "21.0.0"
 firebase-ui-auth = "8.0.2"
 glide = "4.16.0"
 junit = "4.13.2"
@@ -44,7 +44,7 @@ compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedat
 
 # Lifecycle
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
-androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle" }
+androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version = "2.2.0" }
 androidx-lifecycle-compiler = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "lifecycle" }
 
 # Retrofit
