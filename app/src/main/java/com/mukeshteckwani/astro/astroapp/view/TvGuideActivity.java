@@ -72,29 +72,23 @@ public class TvGuideActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.name_ascending:
-                sort(Constants.SORT_NAME_ASC, mAdapter, mEventsList);
-                return true;
-
-            case R.id.name_descending:
-                sort(Constants.SORT_NAME_DESC, mAdapter, mEventsList);
-                return true;
-
-            case R.id.channel_no_ascending:
-                sort(Constants.SORT_ID_ASC, mAdapter, mEventsList);
-                return true;
-
-            case R.id.channel_no_descending:
-                sort(Constants.SORT_ID_DESC, mAdapter, mEventsList);
-                return true;
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (id == R.id.name_ascending) {
+            sort(Constants.SORT_NAME_ASC, mAdapter, mEventsList);
+            return true;
+        } else if (id == R.id.name_descending) {
+            sort(Constants.SORT_NAME_DESC, mAdapter, mEventsList);
+            return true;
+        } else if (id == R.id.channel_no_ascending) {
+            sort(Constants.SORT_ID_ASC, mAdapter, mEventsList);
+            return true;
+        } else if (id == R.id.channel_no_descending) {
+            sort(Constants.SORT_ID_DESC, mAdapter, mEventsList);
+            return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void sort(int sortOrder, TvGuideAdapter channelsAdapter, List<TvGuideModel.Getevent> events) {

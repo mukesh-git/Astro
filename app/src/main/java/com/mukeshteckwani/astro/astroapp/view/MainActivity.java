@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mukeshteckwani.astro.astroapp.R;
 import com.mukeshteckwani.astro.astroapp.adapter.ChannelsAdapter;
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFirebaseAuth() {
         List<AuthUI.IdpConfig> providers = Collections.singletonList(
-                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build());
+                new AuthUI.IdpConfig.GoogleBuilder().build());
 
         startActivityForResult(
                 AuthUI.getInstance()
@@ -174,56 +173,44 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.name_ascending:
-                viewModel.setSortOrder(Constants.SORT_NAME_ASC);
-                sort(Constants.SORT_NAME_ASC, mAllChannelsAdapter, mChannels);
+        if (id == R.id.name_ascending) {
+            viewModel.setSortOrder(Constants.SORT_NAME_ASC);
+            sort(Constants.SORT_NAME_ASC, mAllChannelsAdapter, mChannels);
+            return true;
+        } else if (id == R.id.name_descending) {
+            viewModel.setSortOrder(Constants.SORT_NAME_DESC);
+            sort(Constants.SORT_NAME_DESC, mAllChannelsAdapter, mChannels);
+            return true;
+        } else if (id == R.id.channel_no_ascending) {
+            viewModel.setSortOrder(Constants.SORT_ID_ASC);
+            sort(Constants.SORT_ID_ASC, mAllChannelsAdapter, mChannels);
+            return true;
+        } else if (id == R.id.channel_no_descending) {
+            viewModel.setSortOrder(Constants.SORT_ID_DESC);
+            sort(Constants.SORT_ID_DESC, mAllChannelsAdapter, mChannels);
+            return true;
+        } else if (id == R.id.logout) {
+            binding.pb.setVisibility(View.VISIBLE);
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                initFirebaseAuth();
                 return true;
+            }
 
-            case R.id.name_descending:
-                viewModel.setSortOrder(Constants.SORT_NAME_DESC);
-                sort(Constants.SORT_NAME_DESC, mAllChannelsAdapter, mChannels);
-                return true;
-
-            case R.id.channel_no_ascending:
-                viewModel.setSortOrder(Constants.SORT_ID_ASC);
-                sort(Constants.SORT_ID_ASC, mAllChannelsAdapter, mChannels);
-                return true;
-
-            case R.id.channel_no_descending:
-                viewModel.setSortOrder(Constants.SORT_ID_DESC);
-                sort(Constants.SORT_ID_DESC, mAllChannelsAdapter, mChannels);
-                return true;
-
-            case R.id.logout:
-                binding.pb.setVisibility(View.VISIBLE);
-                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    initFirebaseAuth();
-                    return true;
-                }
-
-                AuthUI.getInstance()
-                        .signOut(this)
-                        .addOnCompleteListener(task -> {
-                            binding.pb.setVisibility(View.GONE);
-                        });
-                return true;
-
-            case R.id.tv_guide:
-                ArrayList<Integer> channelIdList = new ArrayList<>();
-                for (ChannelsListModel.Channel channel : mChannels) {
-                    channelIdList.add(channel.getChannelId());
-                }
-                Intent intent = new Intent(this,TvGuideActivity.class);
-                intent.putIntegerArrayListExtra(BundleKeys.CHANNELS_LIST,channelIdList);
-                startActivity(intent);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(task -> binding.pb.setVisibility(View.GONE));
+            return true;
+        } else if (id == R.id.tv_guide) {
+            ArrayList<Integer> channelIdList = new ArrayList<>();
+            for (ChannelsListModel.Channel channel : mChannels) {
+                channelIdList.add(channel.getChannelId());
+            }
+            Intent intent = new Intent(this, TvGuideActivity.class);
+            intent.putIntegerArrayListExtra(BundleKeys.CHANNELS_LIST, channelIdList);
+            startActivity(intent);
+            return true;
         }
-
+        return super.onOptionsItemSelected(item);
     }
 
     private void sort(int sortOrder, ChannelsAdapter channelsAdapter, List<ChannelsListModel.Channel> channels) {
@@ -274,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            if (resultCode == ResultCodes.OK) {
+            if (resultCode == RESULT_OK) {
                 if (mChannel != null) {
                     mChannel.setChecked(!mChannel.isChecked());
                     viewModel.writeOrRemoveChannelsData(mChannel);

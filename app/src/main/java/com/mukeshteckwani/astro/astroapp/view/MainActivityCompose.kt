@@ -7,10 +7,14 @@ import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mukeshteckwani.astro.astroapp.R
 import com.mukeshteckwani.astro.astroapp.ui.theme.AstroAppTheme
 import com.mukeshteckwani.astro.astroapp.ui.screens.ChannelsListScreen
 import com.mukeshteckwani.astro.astroapp.utils.BundleKeys
@@ -37,6 +41,7 @@ class MainActivityCompose : ComponentActivity() {
         }
     }
     
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun MainAppContent(viewModel: ChannelsListViewModel) {
         var showMenu by remember { mutableStateOf(false) }
@@ -48,19 +53,19 @@ class MainActivityCompose : ComponentActivity() {
                     actions = {
                         IconButton(onClick = { /* Handle TV Guide */ }) {
                             Icon(
-                                imageVector = androidx.compose.material.icons.Icons.Default.List,
+                                imageVector = Icons.Filled.List,
                                 contentDescription = "TV Guide"
                             )
                         }
                         IconButton(onClick = { /* Handle Login/Logout */ }) {
                             Icon(
-                                imageVector = androidx.compose.material.icons.Icons.Default.Person,
+                                imageVector = Icons.Filled.Person,
                                 contentDescription = "Login/Logout"
                             )
                         }
                         IconButton(onClick = { showMenu = true }) {
                             Icon(
-                                imageVector = androidx.compose.material.icons.Icons.Default.MoreVert,
+                                imageVector = Icons.Filled.MoreVert,
                                 contentDescription = "More"
                             )
                         }
@@ -72,7 +77,7 @@ class MainActivityCompose : ComponentActivity() {
                 ChannelsListScreen(
                     viewModel = viewModel,
                     onToggleFav = { channel ->
-                        channel.checked = !channel.checked
+                        channel.setChecked(!channel.isChecked())
                         viewModel.writeOrRemoveChannelsData(channel)
                     }
                 )
