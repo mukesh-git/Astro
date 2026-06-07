@@ -1,0 +1,94 @@
+[versions]
+agp = "8.1.4"
+android-minSdk = "21"
+android-compileSdk = "34"
+android-targetSdk = "34"
+buildTools = "34.0.0"
+appcompat = "1.6.8"
+constraintlayout = "2.1.4"
+material = "1.11.0"
+compose-bom = "2024.02.00"
+retrofit = "2.9.0"
+okhttp = "4.12.0"
+lifecycle = "2.6.2"
+firebase-auth = "20.13.1"
+firebase-database = "20.13.1"
+firebase-ui-auth = "8.0.2"
+glide = "4.16.0"
+junit = "4.13.2"
+androidx-test-runner = "1.5.2"
+espresso-core = "3.5.1"
+google-services = "4.4.0"
+hilt = "2.48.1"
+hilt-navigation-compose = "1.1.0"
+kotlin = "1.9.22"
+
+[libraries]
+# AndroidX Core
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Compose
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version = "1.8.2" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.7" }
+compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+
+# Lifecycle
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
+androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle" }
+androidx-lifecycle-compiler = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "lifecycle" }
+
+# Retrofit
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+
+# OkHttp
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-urlconnection = { group = "com.squareup.okhttp3", name = "okhttp-urlconnection", version.ref = "okhttp" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
+# Firebase
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
+firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebase-ui-auth" }
+
+# Glide
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+
+# Testing
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+
+# Gradle Plugins
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+google-services-plugin = { group = "com.google.gms", name = "google-services", version.ref = "google-services" }
+
+# Hilt
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+hilt-lifecycle-viewmodel = { group = "androidx.hilt", name = "hilt-lifecycle-viewmodel", version = "1.0.0-alpha03" }
+
+[bundles]
+network = ["retrofit", "retrofit-converter-gson", "okhttp", "okhttp-urlconnection", "okhttp-logging-interceptor"]
+lifecycle = ["androidx-lifecycle-runtime", "androidx-lifecycle-extensions"]
+firebase = ["firebase-auth", "firebase-database", "firebase-ui-auth"]
+testing = ["junit", "androidx-test-runner", "androidx-espresso-core"]
+compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview", "compose-material3", "compose-viewmodel", "compose-activity", "compose-livedata"]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+google-services-plugin = { id = "com.google.gms.google-services", version.ref = "google-services" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

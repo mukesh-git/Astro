@@ -1,16 +1,17 @@
 package com.mukeshteckwani.astro.astroapp.view;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mukeshteckwani.astro.astroapp.R;
 import com.mukeshteckwani.astro.astroapp.adapter.TvGuideAdapter;
@@ -24,10 +25,13 @@ import com.mukeshteckwani.astro.astroapp.viewmodel.TvGuideViewModel;
 import java.util.Collections;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * Created by mukeshteckwani on 21/12/17.
  */
 
+@AndroidEntryPoint
 public class TvGuideActivity extends AppCompatActivity {
 
     private ActivityTvGuideBinding binding;
@@ -45,7 +49,7 @@ public class TvGuideActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setTitle(R.string.tv_guide);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        viewModel = ViewModelProviders.of(this).get(TvGuideViewModel.class);
+        viewModel = new ViewModelProvider(this).get(TvGuideViewModel.class);
         fetchTvGuide();
     }
 
