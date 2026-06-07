@@ -1,34 +1,28 @@
 [versions]
-agp = "8.1.4"
-android-minSdk = "21"
-android-compileSdk = "34"
+agp = "8.9.1"
+android-minSdk = "23"
+android-compileSdk = "36"
 android-targetSdk = "34"
 buildTools = "34.0.0"
-appcompat = "1.6.1"
-constraintlayout = "2.1.4"
-material = "1.11.0"
 compose-bom = "2024.02.00"
 retrofit = "2.9.0"
 okhttp = "4.12.0"
-lifecycle = "2.6.2"
+lifecycle = "2.8.7"
 firebase-auth = "22.3.1"
 firebase-database = "21.0.0"
 firebase-ui-auth = "8.0.2"
-glide = "4.16.0"
+coil = "2.6.0"
 junit = "4.13.2"
 androidx-test-runner = "1.5.2"
-espresso-core = "3.5.1"
 google-services = "4.4.0"
-hilt = "2.48.1"
-hilt-navigation-compose = "1.1.0"
-kotlin = "1.9.22"
+hilt = "2.56.2"
+hilt-navigation-compose = "1.2.0"
+kotlin = "2.1.20"
+nav3Core = "1.1.2"
+kotlinxSerializationCore = "1.8.1"
+coroutines = "1.10.2"
 
 [libraries]
-# AndroidX Core
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-androidx-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
 # Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -36,16 +30,22 @@ compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-compose-activity = { group = "androidx.activity", name = "activity-compose", version = "1.8.2" }
-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.7" }
-compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version = "1.10.1" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+
+# Navigation 3
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 
 # Lifecycle
-androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
-androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version = "2.2.0" }
-androidx-lifecycle-compiler = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "lifecycle" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
+
+# Coroutines
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
 # Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -61,13 +61,12 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebase-ui-auth" }
 
-# Glide
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+# Images
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 # Gradle Plugins
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -77,14 +76,11 @@ google-services-plugin = { group = "com.google.gms", name = "google-services", v
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
-hilt-lifecycle-viewmodel = { group = "androidx.hilt", name = "hilt-lifecycle-viewmodel", version = "1.0.0-alpha03" }
 
 [bundles]
 network = ["retrofit", "retrofit-converter-gson", "okhttp", "okhttp-urlconnection", "okhttp-logging-interceptor"]
-lifecycle = ["androidx-lifecycle-runtime", "androidx-lifecycle-extensions"]
-firebase = ["firebase-auth", "firebase-database", "firebase-ui-auth"]
-testing = ["junit", "androidx-test-runner", "androidx-espresso-core"]
-compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview", "compose-material3", "compose-viewmodel", "compose-activity", "compose-livedata"]
+compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material3", "compose-viewmodel", "compose-activity", "androidx-lifecycle-runtime-compose"]
+nav3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "kotlinx-serialization-core"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -92,3 +88,5 @@ google-services-plugin = { id = "com.google.gms.google-services", version.ref = 
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

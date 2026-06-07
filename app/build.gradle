@@ -2,49 +2,27 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
-}
-
-ext {
-    sdkVersion = 34
-    targetsdkVersion = 34
-    supportLibVersion = "1.6.8"
-    playServiceVer = "20.13.1"
-    retrofitVersion = "2.9.0"
-    okhttpVersion = "4.12.0"
-    arch_version = "2.6.2"
 }
 
 android {
     namespace "com.mukeshteckwani.astro.astroapp"
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
 
-    compileSdkVersion sdkVersion
+    compileSdk 36
 
-    buildToolsVersion '34.0.0'
     defaultConfig {
-        vectorDrawables.useSupportLibrary = true
         applicationId "com.mukeshteckwani.astro.astroapp"
-        minSdkVersion 21
-        targetSdkVersion targetsdkVersion
+        minSdk 23
+        targetSdk 34
         versionCode 1
-        versionName '1.0.0'
-        // Enabling multidex support.
+        versionName "1.0.0"
         multiDexEnabled true
         resConfig "en"
-
-    }
-    defaultConfig {
-        applicationId "com.mukeshteckwani.astro.astroapp"
-        minSdkVersion 21
-        targetSdkVersion 34
-        versionCode 1
-        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         def SERVER_URL = "URL"
         def CONFIG = { k -> "\"${project.properties.get(k)}\"" }
@@ -59,55 +37,48 @@ android {
         }
     }
 
-    flavorDimensions "default"
-
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     buildFeatures {
         buildConfig = true
-        dataBinding = true
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation libs.androidx.appcompat
-    implementation libs.androidx.constraintlayout
-    implementation libs.androidx.material
     implementation libs.bundles.network
     implementation libs.androidx.lifecycle.runtime
-    implementation libs.androidx.lifecycle.extensions
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.kotlinx.coroutines.android
     implementation libs.firebase.auth
     implementation libs.firebase.ui.auth
-    implementation libs.glide
     implementation libs.firebase.database
-    annotationProcessor libs.androidx.lifecycle.compiler
-    testImplementation libs.junit
-    androidTestImplementation libs.androidx.test.runner
-    androidTestImplementation libs.androidx.espresso.core
-    
-    // Jetpack Compose
+
     implementation platform(libs.compose.bom)
     implementation libs.bundles.compose
-    implementation "androidx.compose.material:material-icons-extended"
+    implementation libs.compose.material.icons.extended
+    implementation libs.bundles.nav3
+    implementation libs.coil.compose
     debugImplementation libs.compose.ui.tooling
-    
-    // Hilt
+
     implementation libs.hilt.android
-    kapt libs.hilt.compiler
     implementation libs.hilt.navigation.compose
+    kapt libs.hilt.compiler
+
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.runner
 }
 
 apply plugin: 'com.google.gms.google-services'

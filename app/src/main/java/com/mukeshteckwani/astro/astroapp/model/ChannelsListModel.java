@@ -1,17 +1,10 @@
 package com.mukeshteckwani.astro.astroapp.model;
 
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.mukeshteckwani.astro.astroapp.BR;
 
 import java.util.List;
-
-/**
- * Created by mukeshteckwani on 17/12/17.
- */
+import java.util.Objects;
 
 public class ChannelsListModel {
 
@@ -37,9 +30,9 @@ public class ChannelsListModel {
         return channels;
     }
 
-    public static class Channel extends BaseObservable {
+    public static class Channel {
         public Channel() {
-            // Default constructor required for calls to DataSnapshot.getValue(Channel.class)
+            // Default constructor required for Firebase DataSnapshot.getValue(Channel.class)
         }
 
         @SerializedName("channelId")
@@ -66,14 +59,25 @@ public class ChannelsListModel {
             return channelStbNumber;
         }
 
-        @Bindable
         public boolean isChecked() {
             return isChecked;
         }
 
         public void setChecked(boolean checked) {
             isChecked = checked;
-            notifyPropertyChanged(BR.checked);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Channel channel = (Channel) o;
+            return Objects.equals(channelId, channel.channelId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(channelId);
         }
     }
 }
