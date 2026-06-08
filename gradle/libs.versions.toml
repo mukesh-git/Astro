@@ -1,26 +1,30 @@
 [versions]
-agp = "8.9.1"
+agp = "9.2.1"
 android-minSdk = "23"
 android-compileSdk = "36"
 android-targetSdk = "34"
 buildTools = "34.0.0"
-compose-bom = "2024.02.00"
-retrofit = "2.9.0"
-okhttp = "4.12.0"
-lifecycle = "2.8.7"
-firebase-auth = "22.3.1"
-firebase-database = "21.0.0"
-firebase-ui-auth = "8.0.2"
-coil = "2.6.0"
+compose-bom = "2026.05.01"
+retrofit = "3.0.0"
+okhttp = "5.3.2"
+lifecycle = "2.10.0"
+firebase-auth = "24.1.0"
+firebase-database = "22.0.1"
+firebase-ui-auth = "9.1.1"
+coil = "2.7.0"
 junit = "4.13.2"
-androidx-test-runner = "1.5.2"
-google-services = "4.4.0"
-hilt = "2.56.2"
-hilt-navigation-compose = "1.2.0"
+androidx-test-runner = "1.7.0"
+google-services = "4.4.4"
+hilt = "2.59.2"
+hilt-navigation-compose = "1.3.0"
 kotlin = "2.1.20"
 nav3Core = "1.1.2"
-kotlinxSerializationCore = "1.8.1"
-coroutines = "1.10.2"
+paging = "3.5.0"
+room = "2.8.4"
+datastore = "1.2.1"
+kotlinxSerializationCore = "1.11.0"
+coroutines = "1.11.0"
+ksp = "2.1.20-1.0.31"
 
 [libraries]
 # Compose
@@ -31,13 +35,19 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-compose-activity = { group = "androidx.activity", name = "activity-compose", version = "1.10.1" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version = "1.13.0" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 # Navigation 3
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 # Lifecycle
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
@@ -74,8 +84,9 @@ google-services-plugin = { group = "com.google.gms", name = "google-services", v
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 
 [bundles]
 network = ["retrofit", "retrofit-converter-gson", "okhttp", "okhttp-urlconnection", "okhttp-logging-interceptor"]
@@ -85,7 +96,8 @@ nav3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "kotlinx-seri
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-services-plugin = { id = "com.google.gms.google-services", version.ref = "google-services" }
-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

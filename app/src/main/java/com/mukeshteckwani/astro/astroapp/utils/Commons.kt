@@ -1,36 +1,35 @@
-package com.mukeshteckwani.astro.astroapp.utils;
+package com.mukeshteckwani.astro.astroapp.utils
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-public class Commons {
-    public static final String YYYY_MM_DD_HH_MM_SS_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    public static final int DEFAULT_TIME_INTERVAL_IN_MINS = 30;
+object Commons {
+    const val YYYY_MM_DD_HH_MM_SS_FORMAT = "yyyy-MM-dd HH:mm:ss"
+    const val DEFAULT_TIME_INTERVAL_IN_MINS = 30
 
-    public static String getCurrentTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS_FORMAT, Locale.US);
-        Date date = new Date();
-        return dateFormat.format(date);
+    fun getCurrentTime(): String {
+        val dateFormat = SimpleDateFormat(YYYY_MM_DD_HH_MM_SS_FORMAT, Locale.US)
+        val date = Date()
+        return dateFormat.format(date)
     }
 
-    public static String addMinsToCurrentDate(int min) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS_FORMAT, Locale.US);
-        Date date = new Date();
-        long newDate = date.getTime() + min * 60 * 1000L;
-        return dateFormat.format(newDate);
+    fun addMinsToCurrentDate(min: Int): String {
+        val dateFormat = SimpleDateFormat(YYYY_MM_DD_HH_MM_SS_FORMAT, Locale.US)
+        val date = Date()
+        val newDate = date.time + min * 60 * 1000L
+        return dateFormat.format(newDate)
     }
 
-    public static String addSecsToTime(int sec, String time, String inputFormat, String outputFormat) {
-        SimpleDateFormat format1 = new SimpleDateFormat(inputFormat, Locale.US);
-        SimpleDateFormat format2 = new SimpleDateFormat(outputFormat, Locale.US);
-        Date date;
-        try {
-            date = format1.parse(time);
-            long newDate = date.getTime() + sec * 1000L;
-            return format2.format(newDate);
-        } catch (Exception e) {
-            return null;
+    fun addSecsToTime(sec: Int, time: String?, inputFormat: String, outputFormat: String): String? {
+        val format1 = SimpleDateFormat(inputFormat, Locale.US)
+        val format2 = SimpleDateFormat(outputFormat, Locale.US)
+        return try {
+            val date = format1.parse(time)
+            val newDate = date!!.time + sec * 1000L
+            format2.format(newDate)
+        } catch (e: Exception) {
+            null
         }
     }
 }

@@ -1,289 +1,127 @@
-package com.mukeshteckwani.astro.astroapp.model;
+package com.mukeshteckwani.astro.astroapp.model
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-import java.util.List;
-
-/**
- * Created by mukeshteckwani on 21/12/17.
- */
-
-
-public class TvGuideModel {
-
+data class TvGuideModel(
     @SerializedName("responseCode")
     @Expose
-    private String responseCode;
+    val responseCode: String? = null,
     @SerializedName("responseMessage")
     @Expose
-    private String responseMessage;
+    val responseMessage: String? = null,
     @SerializedName("getevent")
     @Expose
-    private List<Getevent> getevent = null;
-
-    public class VernacularDatum {
-
+    val getevent: List<Getevent>? = null
+) {
+    data class VernacularDatum(
         @SerializedName("vernacularLanguage")
         @Expose
-        private String vernacularLanguage;
+        val vernacularLanguage: String? = null,
         @SerializedName("vernacularProgrammeTitle")
         @Expose
-        private String vernacularProgrammeTitle;
+        val vernacularProgrammeTitle: String? = null,
         @SerializedName("vernacularShortSynopsis")
         @Expose
-        private String vernacularShortSynopsis;
+        val vernacularShortSynopsis: String? = null,
         @SerializedName("vernacularLongSynopsis")
         @Expose
-        private String vernacularLongSynopsis;
+        val vernacularLongSynopsis: String? = null,
         @SerializedName("actors")
         @Expose
-        private String actors;
+        val actors: String? = null,
         @SerializedName("directors")
         @Expose
-        private String directors;
+        val directors: String? = null,
         @SerializedName("producers")
         @Expose
-        private String producers;
+        val producers: String? = null
+    )
 
-        public String getVernacularLanguage() {
-            return vernacularLanguage;
-        }
-
-        public String getVernacularProgrammeTitle() {
-            return vernacularProgrammeTitle;
-        }
-
-        public String getVernacularShortSynopsis() {
-            return vernacularShortSynopsis;
-        }
-
-        public String getVernacularLongSynopsis() {
-            return vernacularLongSynopsis;
-        }
-
-        public String getActors() {
-            return actors;
-        }
-
-        public String getDirectors() {
-            return directors;
-        }
-
-        public String getProducers() {
-            return producers;
-        }
-    }
-
-    public class Getevent {
-
+    data class Getevent(
         @SerializedName("eventID")
         @Expose
-        private String eventID;
+        val eventID: String? = null,
         @SerializedName("channelId")
         @Expose
-        private Integer channelId;
+        val channelId: Int? = null,
         @SerializedName("channelStbNumber")
         @Expose
-        private String channelStbNumber;
+        val channelStbNumber: String? = null,
         @SerializedName("channelHD")
         @Expose
-        private String channelHD;
+        val channelHD: String? = null,
         @SerializedName("channelTitle")
         @Expose
-        private String channelTitle;
+        val channelTitle: String? = null,
         @SerializedName("epgEventImage")
         @Expose
-        private Object epgEventImage;
+        val epgEventImage: Any? = null,
         @SerializedName("certification")
         @Expose
-        private String certification;
+        val certification: String? = null,
         @SerializedName("displayDateTimeUtc")
         @Expose
-        private String displayDateTimeUtc;
+        val displayDateTimeUtc: String? = null,
         @SerializedName("displayDateTime")
         @Expose
-        private String displayDateTime;
+        val displayDateTime: String? = null,
         @SerializedName("displayDuration")
         @Expose
-        private String displayDuration;
+        val displayDuration: String? = null,
         @SerializedName("siTrafficKey")
         @Expose
-        private String siTrafficKey;
+        val siTrafficKey: String? = null,
         @SerializedName("programmeTitle")
         @Expose
-        private String programmeTitle;
+        val programmeTitle: String? = null,
         @SerializedName("programmeId")
         @Expose
-        private String programmeId;
+        val programmeId: String? = null,
         @SerializedName("episodeId")
         @Expose
-        private String episodeId;
+        val episodeId: String? = null,
         @SerializedName("shortSynopsis")
         @Expose
-        private String shortSynopsis;
+        val shortSynopsis: String? = null,
         @SerializedName("longSynopsis")
         @Expose
-        private Object longSynopsis;
+        val longSynopsis: Any? = null,
         @SerializedName("actors")
         @Expose
-        private String actors;
+        val actors: String? = null,
         @SerializedName("directors")
         @Expose
-        private String directors;
+        val directors: String? = null,
         @SerializedName("producers")
         @Expose
-        private String producers;
+        val producers: String? = null,
         @SerializedName("genre")
         @Expose
-        private String genre;
+        val genre: String? = null,
         @SerializedName("subGenre")
         @Expose
-        private String subGenre;
+        val subGenre: String? = null,
         @SerializedName("live")
         @Expose
-        private Boolean live;
+        val live: Boolean? = null,
         @SerializedName("premier")
         @Expose
-        private Boolean premier;
+        val premier: Boolean? = null,
         @SerializedName("ottBlackout")
         @Expose
-        private Boolean ottBlackout;
+        val ottBlackout: Boolean? = null,
         @SerializedName("highlight")
         @Expose
-        private Object highlight;
+        val highlight: Any? = null,
         @SerializedName("contentId")
         @Expose
-        private Object contentId;
+        val contentId: Any? = null,
         @SerializedName("groupKey")
         @Expose
-        private Integer groupKey;
+        val groupKey: Int? = null,
         @SerializedName("vernacularData")
         @Expose
-        private List<VernacularDatum> vernacularData = null;
-
-        public String getEventID() {
-            return eventID;
-        }
-
-        public Integer getChannelId() {
-            return channelId;
-        }
-
-        public String getChannelStbNumber() {
-            return channelStbNumber;
-        }
-
-        public String getChannelHD() {
-            return channelHD;
-        }
-
-        public String getChannelTitle() {
-            return channelTitle;
-        }
-
-        public Object getEpgEventImage() {
-            return epgEventImage;
-        }
-
-        public String getCertification() {
-            return certification;
-        }
-
-        public String getDisplayDateTimeUtc() {
-            return displayDateTimeUtc;
-        }
-
-        public String getDisplayDateTime() {
-            return displayDateTime;
-        }
-
-        public String getDisplayDuration() {
-            return displayDuration;
-        }
-
-        public String getSiTrafficKey() {
-            return siTrafficKey;
-        }
-
-        public String getProgrammeTitle() {
-            return programmeTitle;
-        }
-
-        public String getProgrammeId() {
-            return programmeId;
-        }
-
-        public String getEpisodeId() {
-            return episodeId;
-        }
-
-        public String getShortSynopsis() {
-            return shortSynopsis;
-        }
-
-        public Object getLongSynopsis() {
-            return longSynopsis;
-        }
-
-        public String getActors() {
-            return actors;
-        }
-
-        public String getDirectors() {
-            return directors;
-        }
-
-        public String getProducers() {
-            return producers;
-        }
-
-        public String getGenre() {
-            return genre;
-        }
-
-        public String getSubGenre() {
-            return subGenre;
-        }
-
-        public Boolean getLive() {
-            return live;
-        }
-
-        public Boolean getPremier() {
-            return premier;
-        }
-
-        public Boolean getOttBlackout() {
-            return ottBlackout;
-        }
-
-        public Object getHighlight() {
-            return highlight;
-        }
-
-        public Object getContentId() {
-            return contentId;
-        }
-
-        public Integer getGroupKey() {
-            return groupKey;
-        }
-
-        public List<VernacularDatum> getVernacularData() {
-            return vernacularData;
-        }
-    }
-
-    public String getResponseCode() {
-        return responseCode;
-    }
-
-    public String getResponseMessage() {
-        return responseMessage;
-    }
-
-    public List<Getevent> getGetevent() {
-        return getevent;
-    }
+        val vernacularData: List<VernacularDatum>? = null
+    )
 }

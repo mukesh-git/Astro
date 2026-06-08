@@ -30,7 +30,7 @@ class TvGuideViewModel @Inject constructor(
     private var sortOrder: Int = 0
 
     fun initialize(channelIds: List<Int>) {
-        repository.setChannelIds(ArrayList(channelIds))
+        repository.channelIds = ArrayList(channelIds)
         _events.value = emptyList()
         _hasMore.value = true
         loadNextPage()
@@ -41,15 +41,11 @@ class TvGuideViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             val result = withContext(Dispatchers.IO) {
-                try {
-                    repository.fetchTvGuide(
-                        repository.startTime,
-                        repository.endTime,
-                        repository.channelIdsString
-                    )
-                } catch (_: Exception) {
-                    null
-                }
+                repository.fetchTvGuide(
+                    repository.currentStartTime,
+                    repository.currentEndTime,
+                    repository.channelIdsString
+                )
             }
             if (result?.getevent != null) {
                 _events.value = _events.value + result.getevent
@@ -63,7 +59,7 @@ class TvGuideViewModel @Inject constructor(
 
     fun setSortOrder(order: Int) {
         sortOrder = order
-        repository.setSortOrder(order)
+        repository.sortOrder = order
     }
 
     fun getSortOrder(): Int = sortOrder

@@ -1,90 +1,34 @@
-```
-# Android
-*.apk
-*.aar
-*.dex
-*.so
-*.dylib
-*.dll
-*.jar
-*.class
-*.o
-*.obj
-*.out
-
-# Gradle
-.gradle/
-build/
-intermediates/
-outputs/
-app/build/
-
-# Local configuration file (sdk path, etc)
-local.properties
-
-# Log Files
-*.log
-
-# Android Studio Navigation editor temp files
-.navigation/
-
-# IDE Generated files
 *.iml
-*.ipr
-*.iws
-.idea/
+.gradle
+/local.properties
+.DS_Store
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+/.idea/gradle.xml
+/build-cache
+**/build/
+**/lint/
+**/.idea/
+/app/schemas
+/manual-uitest.sh
+/app/src/main/res/values/build_id.xml
+/test-translations.gradle
+**/src/main/res/values-[a-z][a-z]/
+**/src/main/res/values-[a-z][a-z][a-z]/
+# Keep baseline profile
+!**/baseline-prof.txt
 
-# Keystore
-*.keystore
-*.jks
-
-# Compiled source
-*.class
-*.o
-*.obj
-*.out
-
-# Dependencies
-node_modules/
+# Exclude all other .txt files
+*.txt
+/build/reports/*.html
+/build/reports/
+**/detekt-baseline.xml
+firebase-distribution.json
+metro-firebase-distribution.json
+.cache_ggshield
+.htmlReport/
+.kotlin/
+contoursAI.license
 venv/
-.venv/
-__pycache__/
-.mypy_cache/
-.pytest_cache/
-target/
-.gradle/
-
-# Environment
-.env
-.env.local
-*.env.*
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-
-# Compressed files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
-```

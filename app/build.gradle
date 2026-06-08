@@ -1,25 +1,26 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt.android)
 }
+
+apply plugin: 'com.google.dagger.hilt.android'
 
 android {
     namespace "com.mukeshteckwani.astro.astroapp"
 
-    compileSdk 36
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.mukeshteckwani.astro.astroapp"
         minSdk 23
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0.0"
         multiDexEnabled true
-        resConfig "en"
+        resourceConfigurations += ['en']
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -30,7 +31,7 @@ android {
             buildConfigField "String", SERVER_URL, CONFIG("release.server.url")
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             buildConfigField "String", SERVER_URL, CONFIG("debug.server.url")
@@ -38,12 +39,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '21'
     }
 
     buildFeatures {
@@ -64,18 +65,24 @@ dependencies {
     implementation libs.kotlinx.coroutines.android
     implementation libs.firebase.auth
     implementation libs.firebase.ui.auth
-    implementation libs.firebase.database
+
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    ksp libs.room.compiler
+    implementation libs.datastore.preferences
 
     implementation platform(libs.compose.bom)
     implementation libs.bundles.compose
     implementation libs.compose.material.icons.extended
     implementation libs.bundles.nav3
     implementation libs.coil.compose
+    implementation libs.androidx.paging.runtime
+    implementation libs.androidx.paging.compose
     debugImplementation libs.compose.ui.tooling
 
     implementation libs.hilt.android
     implementation libs.hilt.navigation.compose
-    kapt libs.hilt.compiler
+    ksp libs.hilt.compiler
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.runner

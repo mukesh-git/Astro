@@ -32,7 +32,6 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.firebase.auth.FirebaseAuth
 import com.mukeshteckwani.astro.astroapp.R
-import com.mukeshteckwani.astro.astroapp.model.ChannelsListModel
 import com.mukeshteckwani.astro.astroapp.ui.components.SortDropdownMenu
 import com.mukeshteckwani.astro.astroapp.ui.screens.ChannelsListScreen
 import com.mukeshteckwani.astro.astroapp.ui.screens.TvGuideScreen
@@ -47,9 +46,8 @@ fun AstroNavGraph(
     val backStack = remember { mutableStateListOf<Any>(ChannelsKey) }
     var tvGuideSortOrder by remember { mutableIntStateOf(0) }
     var showSortMenu by remember { mutableStateOf(false) }
-    var pendingChannel by remember { mutableStateOf<ChannelsListModel.Channel?>(null) }
 
-    val channelList by channelsViewModel.channelList.collectAsStateWithLifecycle()
+    val allChannels by channelsViewModel.allChannels.collectAsStateWithLifecycle()
     val sortOrder by channelsViewModel.sortOrder.collectAsStateWithLifecycle()
 
     val currentKey = backStack.lastOrNull()
@@ -59,11 +57,7 @@ fun AstroNavGraph(
         FirebaseAuthUIActivityResultContract()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            pendingChannel?.let { channel ->
-                channel.setChecked(true)
-                channelsViewModel.writeOrRemoveChannelsData(channel)
-                pendingChannel = null
-            }
+            // User signed in
         }
     }
 
@@ -100,10 +94,9 @@ fun AstroNavGraph(
                     if (!isTvGuide) {
                         IconButton(
                             onClick = {
-                                val channels = channelList?.channels.orEmpty()
-                                if (channels.isNotEmpty()) {
+                                if (allChannels.isNotEmpty()) {
                                     backStack.add(
-                                        TvGuideKey(channels.mapNotNull { it.channelId })
+                                        TvGuideKey(allChannels.mapNotNull { it.channelId })
                                     )
                                 }
                             }
@@ -149,28 +142,30 @@ fun AstroNavGraph(
             )
         }
     ) { paddingValues ->
-        NavDisplay(
-            backStack = backStack,
-            onBack = { backStack.removeLastOrNull() },
-            modifier = Modifier.padding(paddingValues),
-            entryProvider = entryProvider {
-                entry<ChannelsKey> {
-                    ChannelsListScreen(
-                        sortOrder = sortOrder,
-                        onSignInRequired = { channel ->
-                            pendingChannel = channel
-                            launchSignIn()
-                        },
-                        viewModel = channelsViewModel
-                    )
-                }
-                entry<TvGuideKey> { key ->
-                    TvGuideScreen(
-                        channelIds = key.channelIds,
-                        sortOrder = tvGuideSortOrder
-                    )
-                }
+    NavDisplay(
+        backStack = backStack,
+        onBack = {
+            if (backStack.size > 1) {
+                backStack.removeLastOrNull()
+            } else {
+                (context as? Activity)?.finish()
             }
-        )
+        },
+        modifier = Modifier.padding(paddingValues),
+        entryProvider = entryProvider {
+            entry<ChannelsKey> {
+                ChannelsListScreen(
+                    sortOrder = sortOrder,
+                    viewModel = channelsViewModel
+                )
+            }
+            entry<TvGuideKey> { key ->
+                TvGuideScreen(
+                    channelIds = key.channelIds,
+                    sortOrder = tvGuideSortOrder
+                )
+            }
+        }
+    )
     }
 }
